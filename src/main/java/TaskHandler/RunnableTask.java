@@ -25,8 +25,8 @@ public class RunnableTask implements Runnable {
         try {
 //            TODO - NAO ACABADO!!!!
             System.out.println("running task");
-//            OutputStream output = new FileOutputStream(destinyDirectory.getAbsolutePath() + "\\" + remoteFile.getFileName());
-//            ftpClient.retrieveFile(remoteFile.getAbsolutePath() + "/" + remoteFile.getFileName(), output);
+            OutputStream output = new FileOutputStream(destinyDirectory.getAbsolutePath() + "\\" + remoteFile.getFileName());
+            ftpClient.retrieveFile(remoteFile.getAbsolutePath() + "/" + remoteFile.getFileName(), output);
 
 //            mongo.eraseFailedTask();
         }

@@ -1,20 +1,22 @@
 package RemoteFTP;
 
 import TaskHandler.RunnableTask;
+import Utils.Utils;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 
 public class RemoteFTPServer {
     private FTPClient ftpClient;
     private Stack<String> directories;
     private List<RemoteFile> files;
-    private Date selectedDate;
+    private LocalDate selectedDate;
 
-    public RemoteFTPServer(FTPClient ftpClient, Date selectedDate) {
+    public RemoteFTPServer(FTPClient ftpClient, LocalDate selectedDate) {
         this.ftpClient = ftpClient;
         this.directories = new Stack<>();
         this.files = new ArrayList<>();
@@ -57,8 +59,7 @@ public class RemoteFTPServer {
     }
 
     private boolean fileSelectionCriteria(FTPFile entry) {
-        System.err.println(selectedDate);
-        System.err.println(entry.getTimestamp().getTime());
-        return entry.getTimestamp().getTime().equals(selectedDate);
+        LocalDate date = Utils.calendarToLocalDate(entry.getTimestamp());
+        return date.equals(selectedDate);
     }
 }

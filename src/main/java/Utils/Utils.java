@@ -1,12 +1,13 @@
 package Utils;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Calendar;
-import java.util.Date;
 
 public class Utils {
 
-    public static File createNewDir(String baseDir, Date currDay) {
+    public static File createNewDir(String baseDir, LocalDate currDay) {
         File outputDir = new java.io.File("C:\\Users\\Antonio\\Desktop\\Freddy Locks\\teste");
         if (! outputDir.exists()) {
             outputDir.mkdirs();
@@ -22,6 +23,10 @@ public class Utils {
 
     public static Calendar sumOneDay (Calendar day) {
         return null;
+    }
+
+    public static LocalDate calendarToLocalDate(Calendar cal) {
+        return LocalDateTime.ofInstant(cal.toInstant(), cal.getTimeZone().toZoneId()).toLocalDate();
     }
 
 }
