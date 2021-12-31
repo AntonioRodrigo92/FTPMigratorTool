@@ -13,7 +13,7 @@ import java.util.Calendar;
 import java.util.LinkedList;
 
 public class FTPMigratorTool {
-    private final int NUM_WORKERS = Runtime.getRuntime().availableProcessors();
+    private final int NUM_WORKERS = Runtime.getRuntime().availableProcessors() * 10;
     private final String BASE_DIRECTORY = "";
     private LinkedList<RunnableTask> tasks;
     private String server;
@@ -55,7 +55,7 @@ public class FTPMigratorTool {
             RemoteFTPServer remoteServer = new RemoteFTPServer(ftpClient.getFtpClient(), date);
             tasks.addAll(remoteServer.getFilesAsTasks(outputDir));
 
-            System.out.println("THREADS A COMEÇAR");
+            System.out.println("THREADS A COMEÇAR: " + tasks.size());
             ThreadLogic logic = new ThreadLogic(tasks, NUM_WORKERS);
             logic.executeTasks();
             logic.waitForAllThreadsToFinish();

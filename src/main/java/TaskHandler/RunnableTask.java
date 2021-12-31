@@ -3,6 +3,7 @@ import RemoteFTP.RemoteFile;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -25,8 +26,12 @@ public class RunnableTask implements Runnable {
         try {
 //            TODO - NAO ACABADO!!!!
             System.out.println("running task");
-            OutputStream output = new FileOutputStream(destinyDirectory.getAbsolutePath() + "\\" + remoteFile.getFileName());
+            FileOutputStream output = new FileOutputStream(destinyDirectory.getAbsolutePath() + "\\" + remoteFile.getFileName());
+//            OutputStream output = new BufferedOutputStream(new FileOutputStream(destinyDirectory.getAbsolutePath() + "\\" + remoteFile.getFileName()));
             ftpClient.retrieveFile(remoteFile.getAbsolutePath() + "/" + remoteFile.getFileName(), output);
+
+
+            System.out.println("task ended");
 
 //            mongo.eraseFailedTask();
         }

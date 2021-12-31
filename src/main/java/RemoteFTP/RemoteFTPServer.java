@@ -35,14 +35,12 @@ public class RemoteFTPServer {
     }
 
     private void scanFiles() throws IOException {
-        System.out.println("SCAN FILES");
         directories.push("");
         while (! directories.empty()) {
             String dirPath = directories.pop();
             FTPFile[] entries = ftpClient.listFiles(dirPath);
             for (FTPFile entry : entries) {
                 if (fileSelectionCriteria(entry)) {
-                    System.out.println("DATE MATCH!");
                     RemoteFile remoteFile = new RemoteFile(entry, dirPath);
                     files.add(remoteFile);
                 }
@@ -60,6 +58,6 @@ public class RemoteFTPServer {
 
     private boolean fileSelectionCriteria(FTPFile entry) {
         LocalDate date = Utils.calendarToLocalDate(entry.getTimestamp());
-        return date.equals(selectedDate);
+        return date.equals(selectedDate) && entry.isFile() && entry.getSize() > 0;
     }
 }
