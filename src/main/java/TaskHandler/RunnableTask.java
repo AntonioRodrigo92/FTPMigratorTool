@@ -1,28 +1,37 @@
 package TaskHandler;
+import RemoteFTP.RemoteFile;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.util.concurrent.CountDownLatch;
 
 public class RunnableTask implements Runnable {
     private FTPClient ftpClient;
 //    private MongoConnector mongo;
-    private String filePath;
-    private String destinyDirectory;
+    private RemoteFile remoteFile;
+    private File destinyDirectory;
 
-    public RunnableTask(FTPClient ftpClient, /*MongoConnector mongo,*/ String filePath, String destinyDirectory) {
+    public RunnableTask(FTPClient ftpClient, /*MongoConnector mongo,*/ RemoteFile remoteFile, File destinyDirectory) {
         this.ftpClient = ftpClient;
 //        this.mongo = mongo;
-        this.filePath = filePath;
+        this.remoteFile = remoteFile;
         this.destinyDirectory = destinyDirectory;
     }
 
     @Override
     public void run() {
         try {
-            OutputStream output = new FileOutputStream(destinyDirectory + "/" + getFileName(filePath));
-            ftpClient.retrieveFile(filePath, output);
+//            OutputStream output = new FileOutputStream(destinyDirectory.getName() + "/" + remoteFile.getFileName());
+//            ftpClient.retrieveFile(remoteFile.getAbsolutePath(), output);
+
+//            System.err.println("SOURCE: " + remoteFile.getAbsolutePath() + "/" + remoteFile.getFileName());
+//            System.err.println("OUTPUT: " + destinyDirectory.getAbsolutePath() + "\\" + remoteFile.getFileName());
+
+//            TODO - NAO ACABADO!!!!
+            OutputStream output = new FileOutputStream(destinyDirectory.getAbsolutePath() + "\\" + remoteFile.getFileName());
+            ftpClient.retrieveFile(remoteFile.getAbsolutePath() + "/" + remoteFile.getFileName(), output);
 
 //            mongo.eraseFailedTask();
         }

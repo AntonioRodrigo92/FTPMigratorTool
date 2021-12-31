@@ -1,10 +1,13 @@
 import Connections.FTPClientConnector;
+import RemoteFTP.RemoteFTPServer;
+import RemoteFTP.RemoteFile;
 import TaskHandler.RunnableTask;
 import TaskHandler.ThreadLogic;
 import Utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Calendar;
 import java.util.LinkedList;
 
@@ -40,11 +43,16 @@ public class FTPMigratorTool {
             ftpClient.connect(server, port, user, pass);
             File outputDir = Utils.createNewDir(BASE_DIRECTORY, date);
 
-//            TODO - ter todas as tasks para executar (i.e., remote files)
+            System.out.println("CONNECTED");
 
+            RemoteFTPServer remoteServer = new RemoteFTPServer(ftpClient.getFtpClient(), null);
+            tasks.addAll(remoteServer.getFilesAsTasks(outputDir));
+
+            System.out.println("THREADS A COMEÇAR");
             ThreadLogic logic = new ThreadLogic(tasks, NUM_WORKERS);
             logic.executeTasks();
             logic.waitForAllThreadsToFinish();
+            System.out.println("THREADS ACABARAM");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -56,7 +64,8 @@ public class FTPMigratorTool {
 
 
     public static void main(String[] args) {
-
+        FTPMigratorTool migrator = new FTPMigratorTool("192.168.1.1", 21, "sandisk16gb", "PalavraPasse1");
+        migrator.migrate();
     }
 }
 
