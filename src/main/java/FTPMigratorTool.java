@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 
 public class FTPMigratorTool {
@@ -21,7 +22,7 @@ public class FTPMigratorTool {
     private String pass;
 //    private MongoConnector mongo;
     private FTPClientConnector ftpClient;
-    private Calendar date;
+    private Date date;
 
     public FTPMigratorTool(String server, int port, String user, String pass) {
         this.server = server;
@@ -34,8 +35,12 @@ public class FTPMigratorTool {
 //        this.date = mongo.getLastDay();
 
 
-        this.date = Calendar.getInstance();
-        this.date.set(2021, 12, 11);
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, 2021);
+        cal.set(Calendar.MONTH, 11);
+        cal.set(Calendar.DAY_OF_MONTH, 4);
+
+        date = cal.getTime();
     }
 
     private void migrate() {
@@ -45,7 +50,7 @@ public class FTPMigratorTool {
 
             System.out.println("CONNECTED");
 
-            RemoteFTPServer remoteServer = new RemoteFTPServer(ftpClient.getFtpClient(), null);
+            RemoteFTPServer remoteServer = new RemoteFTPServer(ftpClient.getFtpClient(), date);
             tasks.addAll(remoteServer.getFilesAsTasks(outputDir));
 
             System.out.println("THREADS A COMEÇAR");
@@ -66,6 +71,21 @@ public class FTPMigratorTool {
     public static void main(String[] args) {
         FTPMigratorTool migrator = new FTPMigratorTool("192.168.1.1", 21, "sandisk16gb", "PalavraPasse1");
         migrator.migrate();
+
+//        Calendar date = Calendar.getInstance();
+//        date.set(Calendar.YEAR, 2021);
+//        date.set(Calendar.MONTH, 11);
+//        date.set(Calendar.DAY_OF_MONTH, 4);
+//        Date d = date.getTime();
+//
+//        Calendar date2 = Calendar.getInstance();
+//        date2.set(Calendar.YEAR, 2021);
+//        date2.set(Calendar.MONTH, 11);
+//        date2.set(Calendar.DAY_OF_MONTH, 4);
+//        Date d1 = date.getTime();
+//
+//        System.out.println(d.compareTo(d1));
+//        System.out.println(d.equals(d1));
     }
 }
 

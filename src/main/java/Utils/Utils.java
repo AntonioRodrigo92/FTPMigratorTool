@@ -2,10 +2,11 @@ package Utils;
 
 import java.io.File;
 import java.util.Calendar;
+import java.util.Date;
 
 public class Utils {
 
-    public static File createNewDir(String baseDir, Calendar currDay) {
+    public static File createNewDir(String baseDir, Date currDay) {
         File outputDir = new java.io.File("C:\\Users\\Antonio\\Desktop\\Freddy Locks\\teste");
         if (! outputDir.exists()) {
             outputDir.mkdirs();

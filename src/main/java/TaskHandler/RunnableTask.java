@@ -23,15 +23,10 @@ public class RunnableTask implements Runnable {
     @Override
     public void run() {
         try {
-//            OutputStream output = new FileOutputStream(destinyDirectory.getName() + "/" + remoteFile.getFileName());
-//            ftpClient.retrieveFile(remoteFile.getAbsolutePath(), output);
-
-//            System.err.println("SOURCE: " + remoteFile.getAbsolutePath() + "/" + remoteFile.getFileName());
-//            System.err.println("OUTPUT: " + destinyDirectory.getAbsolutePath() + "\\" + remoteFile.getFileName());
-
 //            TODO - NAO ACABADO!!!!
-            OutputStream output = new FileOutputStream(destinyDirectory.getAbsolutePath() + "\\" + remoteFile.getFileName());
-            ftpClient.retrieveFile(remoteFile.getAbsolutePath() + "/" + remoteFile.getFileName(), output);
+            System.out.println("running task");
+//            OutputStream output = new FileOutputStream(destinyDirectory.getAbsolutePath() + "\\" + remoteFile.getFileName());
+//            ftpClient.retrieveFile(remoteFile.getAbsolutePath() + "/" + remoteFile.getFileName(), output);
 
 //            mongo.eraseFailedTask();
         }

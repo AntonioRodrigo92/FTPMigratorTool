@@ -6,18 +6,15 @@ import org.apache.commons.net.ftp.FTPFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class RemoteFTPServer {
     private FTPClient ftpClient;
     private Stack<String> directories;
     private List<RemoteFile> files;
-    private Calendar selectedDate;
+    private Date selectedDate;
 
-    public RemoteFTPServer(FTPClient ftpClient, Calendar selectedDate) {
+    public RemoteFTPServer(FTPClient ftpClient, Date selectedDate) {
         this.ftpClient = ftpClient;
         this.directories = new Stack<>();
         this.files = new ArrayList<>();
@@ -43,6 +40,7 @@ public class RemoteFTPServer {
             FTPFile[] entries = ftpClient.listFiles(dirPath);
             for (FTPFile entry : entries) {
                 if (fileSelectionCriteria(entry)) {
+                    System.out.println("DATE MATCH!");
                     RemoteFile remoteFile = new RemoteFile(entry, dirPath);
                     files.add(remoteFile);
                 }
@@ -59,6 +57,8 @@ public class RemoteFTPServer {
     }
 
     private boolean fileSelectionCriteria(FTPFile entry) {
-        return entry.isFile();
+        System.err.println(selectedDate);
+        System.err.println(entry.getTimestamp().getTime());
+        return entry.getTimestamp().getTime().equals(selectedDate);
     }
 }
