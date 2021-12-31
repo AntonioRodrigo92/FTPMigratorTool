@@ -29,6 +29,8 @@ public class RunnableTask implements Runnable {
             FileOutputStream output = new FileOutputStream(destinyDirectory.getAbsolutePath() + "\\" + remoteFile.getFileName());
 //            OutputStream output = new BufferedOutputStream(new FileOutputStream(destinyDirectory.getAbsolutePath() + "\\" + remoteFile.getFileName()));
             ftpClient.retrieveFile(remoteFile.getAbsolutePath() + "/" + remoteFile.getFileName(), output);
+            output.flush();
+            output.close();
 
 
             System.out.println("task ended");

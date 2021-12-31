@@ -58,6 +58,6 @@ public class RemoteFTPServer {
 
     private boolean fileSelectionCriteria(FTPFile entry) {
         LocalDate date = Utils.calendarToLocalDate(entry.getTimestamp());
-        return date.equals(selectedDate) && entry.isFile() && entry.getSize() > 0;
+        return date.equals(selectedDate) && entry.isFile() && entry.getSize() > 0 && entry.getName().endsWith(".mp4");
     }
 }

@@ -8,12 +8,12 @@ import Utils.Utils;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.LinkedList;
 
 public class FTPMigratorTool {
     private final int NUM_WORKERS = Runtime.getRuntime().availableProcessors() * 10;
+//    private final int NUM_WORKERS = 100;
     private final String BASE_DIRECTORY = "";
     private LinkedList<RunnableTask> tasks;
     private String server;
