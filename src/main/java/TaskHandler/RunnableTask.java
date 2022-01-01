@@ -21,7 +21,8 @@ public class RunnableTask implements Runnable {
     @Override
     public void run() {
         try {
-//            TODO - NAO ACABADO!!!!
+//            TODO - NAO ACABADO, nao sei onde bate a concorrencia :(
+
             File localFile = new File(destinyDirectory.getAbsolutePath() + "\\" + remoteFile.getFileName());
             OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(localFile));
             InputStream inputStream = ftpClient.retrieveFileStream(remoteFile.getAbsolutePath() + "/" + remoteFile.getFileName());
