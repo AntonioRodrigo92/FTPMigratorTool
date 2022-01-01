@@ -1,5 +1,7 @@
 package Utils;
 
+import org.apache.commons.net.ftp.FTPClient;
+
 import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -7,7 +9,7 @@ import java.util.Calendar;
 
 public class Utils {
 
-//    TODO - ALTERAR PARA CRIAR DiR COM O TEMPO
+//    TODO - ALTERAR PARA CRIAR DIR COM O TEMPO
     public static File createNewDir(String baseDir, LocalDate currDay) {
         File outputDir = new java.io.File("C:\\Users\\Antonio\\Desktop\\Freddy Locks\\teste");
         if (! outputDir.exists()) {

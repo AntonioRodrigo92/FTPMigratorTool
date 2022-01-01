@@ -12,8 +12,8 @@ import java.util.Calendar;
 import java.util.LinkedList;
 
 public class FTPMigratorTool {
-    private final int NUM_WORKERS = Runtime.getRuntime().availableProcessors() * 10;
-//    private final int NUM_WORKERS = 100;
+//    private final int NUM_WORKERS = Runtime.getRuntime().availableProcessors();
+    private final int NUM_WORKERS = 1;
     private final String BASE_DIRECTORY = "";
     private LinkedList<RunnableTask> tasks;
     private String server;
@@ -63,6 +63,8 @@ public class FTPMigratorTool {
 
             long timeSpent = System.nanoTime() - st;
             System.out.println(timeSpent);
+
+            ftpClient.disconnect();
 
         } catch (IOException e) {
             e.printStackTrace();
