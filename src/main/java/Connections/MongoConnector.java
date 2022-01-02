@@ -56,15 +56,6 @@ public class MongoConnector {
     }
 
     public synchronized void removeFromFailedDownloads(Document doc) {
-
-    }
-
-    public MongoCursor<Document> getFinalizedDaysAsCursor() {
-        return finalizedDays.find().iterator();
-    }
-
-    public MongoCursor<Document> getFailedDownloadsAsCursor() {
-        return failedDownloads.find().iterator();
     }
 
     public static void main(String[] args) {
