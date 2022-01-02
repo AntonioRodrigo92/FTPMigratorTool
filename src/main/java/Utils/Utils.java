@@ -11,7 +11,7 @@ public class Utils {
 
 //    TODO - ALTERAR PARA CRIAR DIR COM O TEMPO
     public static File createNewDir(String baseDir, LocalDate currDay) {
-        File outputDir = new java.io.File("C:\\Users\\Antonio\\Desktop\\Freddy Locks\\teste");
+        File outputDir = new java.io.File(baseDir + "\\" + currDay.toString());
         if (! outputDir.exists()) {
             outputDir.mkdirs();
         }

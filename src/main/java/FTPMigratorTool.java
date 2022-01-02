@@ -1,6 +1,5 @@
 import Connections.FTPClientConnector;
 import RemoteFTP.RemoteFTPServer;
-import RemoteFTP.RemoteFile;
 import TaskHandler.RunnableTask;
 import TaskHandler.ThreadLogic;
 import Utils.Utils;
@@ -14,7 +13,7 @@ import java.util.LinkedList;
 public class FTPMigratorTool {
 //    private final int NUM_WORKERS = Runtime.getRuntime().availableProcessors();
     private final int NUM_WORKERS = 1;
-    private final String BASE_DIRECTORY = "";
+    private final String BASE_DIRECTORY = "C:\\Users\\Antonio\\Desktop\\Freddy Locks\\teste";
     private LinkedList<RunnableTask> tasks;
     private String server;
     private int port;
