@@ -21,22 +21,29 @@ public class RunnableTask implements Runnable {
     @Override
     public void run() {
         try {
-//            TODO - NAO ACABADO, nao sei onde bate a concorrencia :(
+//            TODO - NAO ACABADO: protocolo nao permite concorrencia... :(
 
-            File localFile = new File(destinyDirectory.getAbsolutePath() + "\\" + remoteFile.getFileName());
-            OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(localFile));
-            InputStream inputStream = ftpClient.retrieveFileStream(remoteFile.getAbsolutePath() + "/" + remoteFile.getFileName());
-            byte[] bytesArray = new byte[4096];
-            int bytesRead = -1;
-            while ((bytesRead = inputStream.read(bytesArray)) != -1) {
-                outputStream.write(bytesArray, 0, bytesRead);
-            }
-            boolean success = ftpClient.completePendingCommand();
-            if (success) {
-                System.out.println("File has been downloaded successfully.");
-            }
-            outputStream.close();
-            inputStream.close();
+//            File localFile = new File(destinyDirectory.getAbsolutePath() + "\\" + remoteFile.getFileName());
+//            OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(localFile));
+//            InputStream inputStream = ftpClient.retrieveFileStream(remoteFile.getAbsolutePath() + "/" + remoteFile.getFileName());
+//            byte[] bytesArray = new byte[4096];
+//            int bytesRead = -1;
+//            while ((bytesRead = inputStream.read(bytesArray)) != -1) {
+//                outputStream.write(bytesArray, 0, bytesRead);
+//            }
+//            boolean success = ftpClient.completePendingCommand();
+//            if (success) {
+//                System.out.println("File has been downloaded successfully.");
+//            }
+//            outputStream.close();
+//            inputStream.close();
+
+
+
+            String filename = destinyDirectory.getAbsolutePath() + "\\" + remoteFile.getFileName();
+            FileOutputStream fos = new FileOutputStream(filename);
+            ftpClient.retrieveFile(remoteFile.getAbsolutePath() + "/" + remoteFile.getFileName() + filename, fos);
+            fos.close();
 
 
 //            mongo.eraseFailedTask();
