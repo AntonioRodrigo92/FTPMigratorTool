@@ -5,7 +5,9 @@ import org.apache.commons.net.ftp.FTPClient;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Calendar;
+import java.util.Date;
 
 public class Utils {
 
@@ -30,6 +32,12 @@ public class Utils {
 
     public static LocalDate calendarToLocalDate(Calendar cal) {
         return LocalDateTime.ofInstant(cal.toInstant(), cal.getTimeZone().toZoneId()).toLocalDate();
+    }
+
+    public static LocalDate dateToLocalDate(Date date) {
+        return date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
     }
 
 }

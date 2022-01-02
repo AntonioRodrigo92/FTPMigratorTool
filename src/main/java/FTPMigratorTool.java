@@ -1,4 +1,5 @@
 import Connections.FTPClientConnector;
+import Connections.MongoConnector;
 import RemoteFTP.RemoteFTPServer;
 import TaskHandler.RunnableTask;
 import TaskHandler.ThreadLogic;
@@ -19,19 +20,19 @@ public class FTPMigratorTool {
     private int port;
     private String user;
     private String pass;
-//    private MongoConnector mongo;
+    private MongoConnector mongo;
     private FTPClientConnector ftpClient;
     private LocalDate date;
 
-    public FTPMigratorTool(String server, int port, String user, String pass) {
+    public FTPMigratorTool(String server, int port, String user, String pass, String uri, String databaseName, String finalizedDays, String failedDownloads) {
         this.server = server;
         this.port = port;
         this.user = user;
         this.pass = pass;
         this.tasks = new LinkedList<>();
-//        this.mongo = new MongoConnector(tasks);
+        this.mongo = new MongoConnector(uri, databaseName, finalizedDays, failedDownloads);
         this.ftpClient = new FTPClientConnector();
-//        this.date = mongo.getLastDay();
+        this.date = mongo.getLastDay();
 
 
         Calendar cal = Calendar.getInstance();
@@ -75,8 +76,8 @@ public class FTPMigratorTool {
 
 
     public static void main(String[] args) {
-        FTPMigratorTool migrator = new FTPMigratorTool("192.168.1.1", 21, "sandisk16gb", "PalavraPasse1");
-        migrator.migrate();
+//        FTPMigratorTool migrator = new FTPMigratorTool("192.168.1.1", 21, "sandisk16gb", "PalavraPasse1");
+//        migrator.migrate();
     }
 }
 
