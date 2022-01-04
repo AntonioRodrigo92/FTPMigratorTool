@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class MongoConnector {
+    private MongoClient mongoClient;
     private MongoDatabase database;
     private MongoCollection<Document> finalizedDays;
     private MongoCollection<Document> failedDownloads;
@@ -22,7 +23,7 @@ public class MongoConnector {
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
                 .build();
-        MongoClient mongoClient = MongoClients.create(settings);
+        this.mongoClient = MongoClients.create(settings);
         this.database = mongoClient.getDatabase(databaseName);
         this.finalizedDays = database.getCollection(finalizedDays);
         this.failedDownloads = database.getCollection(failedDownloads);
@@ -56,6 +57,10 @@ public class MongoConnector {
     }
 
     public synchronized void removeFromFailedDownloads(Document doc) {
+    }
+
+    public void closeConnection() {
+        mongoClient.close();
     }
 
     public static void main(String[] args) {
