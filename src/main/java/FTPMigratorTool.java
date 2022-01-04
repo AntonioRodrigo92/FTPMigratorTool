@@ -4,6 +4,7 @@ import RemoteFTP.RemoteFTPServer;
 import TaskHandler.RunnableTask;
 import TaskHandler.ThreadLogic;
 import Utils.Utils;
+import Utils.UserInput;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,23 +15,16 @@ import java.util.LinkedList;
 public class FTPMigratorTool {
 //    private final int NUM_WORKERS = Runtime.getRuntime().availableProcessors();
     private final int NUM_WORKERS = 1;
-    private final String BASE_DIRECTORY = "C:\\Users\\Antonio\\Desktop\\Freddy Locks\\teste";
     private LinkedList<RunnableTask> tasks;
-    private String server;
-    private int port;
-    private String user;
-    private String pass;
+    private UserInput userInput;
     private MongoConnector mongo;
     private FTPClientConnector ftpClient;
     private LocalDate date;
 
-    public FTPMigratorTool(String server, int port, String user, String pass, String uri, String databaseName, String finalizedDays, String failedDownloads) {
-        this.server = server;
-        this.port = port;
-        this.user = user;
-        this.pass = pass;
+    public FTPMigratorTool(UserInput userInput) {
+        this.userInput = userInput;
         this.tasks = new LinkedList<>();
-        this.mongo = new MongoConnector(uri, databaseName, finalizedDays, failedDownloads);
+        this.mongo = new MongoConnector(userInput.getMongoURI(), userInput.getMongoDatabase(), userInput.getMongoCollectionDays(), userInput.getMongoCollectionFailures());
         this.ftpClient = new FTPClientConnector();
         this.date = mongo.getLastDay();
 
@@ -45,8 +39,8 @@ public class FTPMigratorTool {
 
     private void migrate() {
         try {
-            ftpClient.connect(server, port, user, pass);
-            File outputDir = Utils.createNewDir(BASE_DIRECTORY, date);
+            ftpClient.connect(userInput.getServer(), userInput.getPort(), userInput.getUser(), userInput.getPass());
+            File outputDir = Utils.createNewDir(userInput.getBaseDirectory(), date);
 
             System.out.println("CONNECTED");
 
