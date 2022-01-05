@@ -40,7 +40,7 @@ public class FTPMigratorTool {
                 Date startTime = Utils.getCurrentDateTime();
                 /*
                 ftpClient.connect(userInput.getFtpServer(), userInput.getFtpPort(), userInput.getFtpUser(), userInput.getFtpPass());
-                //TODO - failedTask
+//                TODO - failedTask
                 for (Document doc : mongo.getFailedTasks()) {
                     RunnableTask task = null;
                     tasks.add(task);
