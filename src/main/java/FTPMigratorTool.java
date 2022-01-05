@@ -5,11 +5,12 @@ import TaskHandler.RunnableTask;
 import TaskHandler.ThreadLogic;
 import Utils.Utils;
 import Utils.UserInput;
+import org.bson.Document;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 
 public class FTPMigratorTool {
@@ -27,51 +28,58 @@ public class FTPMigratorTool {
         this.mongo = new MongoConnector(userInput.getMongoURI(), userInput.getMongoDatabase(), userInput.getMongoCollectionDays(), userInput.getMongoCollectionFailures());
         this.ftpClient = new FTPClientConnector();
         this.date = mongo.getLastDay();
-
-
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, 2021);
-        cal.set(Calendar.MONTH, 11);
-        cal.set(Calendar.DAY_OF_MONTH, 4);
-
-        date = Utils.calendarToLocalDate(cal);
     }
 
     private void migrate() {
         try {
-            ftpClient.connect(userInput.getServer(), userInput.getPort(), userInput.getUser(), userInput.getPass());
-            File outputDir = Utils.createNewDir(userInput.getBaseDirectory(), date);
 
-            System.out.println("CONNECTED");
+            System.out.println(date);
+            System.out.println(Utils.yesterday());
 
-            long st = System.nanoTime();
+            while (! date.equals(Utils.yesterday())) {
+                Date startTime = Utils.getCurrentDateTime();
+                /*
+                ftpClient.connect(userInput.getFtpServer(), userInput.getFtpPort(), userInput.getFtpUser(), userInput.getFtpPass());
+                //TODO - failedTask
+                for (Document doc : mongo.getFailedTasks()) {
+                    RunnableTask task = null;
+                    tasks.add(task);
+                }
+                File outputDir = Utils.createNewDir(userInput.getBaseDirectory(), date);
 
-            RemoteFTPServer remoteServer = new RemoteFTPServer(ftpClient.getFtpClient(), date);
-            tasks.addAll(remoteServer.getFilesAsTasks(outputDir));
+                RemoteFTPServer remoteServer = new RemoteFTPServer(ftpClient.getFtpClient(), mongo, date);
+                tasks.addAll(remoteServer.getFilesAsTasks(outputDir));
+                int taskSize = tasks.size();
 
-            System.out.println("THREADS A COMEÇAR: " + tasks.size());
-            ThreadLogic logic = new ThreadLogic(tasks, NUM_WORKERS);
-            logic.executeTasks();
-            logic.waitForAllThreadsToFinish();
-            System.out.println("THREADS ACABARAM");
+                ThreadLogic logic = new ThreadLogic(tasks, NUM_WORKERS);
+                logic.executeTasks();
+                logic.waitForAllThreadsToFinish();
+                 */
 
-            long timeSpent = System.nanoTime() - st;
-            System.out.println(timeSpent);
+                Date endTime = Utils.getCurrentDateTime();
+//                mongo.writeFinalizedDay(date, startTime, endTime, taskSize);
+                mongo.writeFinalizedDay(date, startTime, endTime, 0);
+                date = Utils.sumOneDay(date);
+            }
 
             ftpClient.disconnect();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+            mongo.closeConnection();
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
+//        catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
     }
 
 
     public static void main(String[] args) {
-//        FTPMigratorTool migrator = new FTPMigratorTool("192.168.1.1", 21, "sandisk16gb", "PalavraPasse1");
-//        migrator.migrate();
+        String path = "";
+        UserInput userInput = new UserInput(path);
+        FTPMigratorTool migrator = new FTPMigratorTool(userInput);
+        migrator.migrate();
     }
 }
 

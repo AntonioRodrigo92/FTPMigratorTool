@@ -1,5 +1,6 @@
 package RemoteFTP;
 
+import Connections.MongoConnector;
 import TaskHandler.RunnableTask;
 import Utils.Utils;
 import org.apache.commons.net.ftp.FTPClient;
@@ -12,12 +13,14 @@ import java.util.*;
 
 public class RemoteFTPServer {
     private FTPClient ftpClient;
+    private MongoConnector mongo;
     private Stack<String> directories;
     private List<RemoteFile> files;
     private LocalDate selectedDate;
 
-    public RemoteFTPServer(FTPClient ftpClient, LocalDate selectedDate) {
+    public RemoteFTPServer(FTPClient ftpClient, MongoConnector mongo, LocalDate selectedDate) {
         this.ftpClient = ftpClient;
+        this.mongo = mongo;
         this.directories = new Stack<>();
         this.files = new ArrayList<>();
         this.selectedDate = selectedDate;
@@ -28,7 +31,7 @@ public class RemoteFTPServer {
         scanFiles();
         List<RunnableTask> tasks = new ArrayList<>();
         for (RemoteFile file : files) {
-            RunnableTask task = new RunnableTask(ftpClient, file, destinyDirectory);
+            RunnableTask task = new RunnableTask(ftpClient, mongo, file, destinyDirectory);
             tasks.add(task);
         }
         return tasks;

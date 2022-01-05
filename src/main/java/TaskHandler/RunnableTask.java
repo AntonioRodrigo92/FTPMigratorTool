@@ -1,19 +1,21 @@
 package TaskHandler;
+import Connections.MongoConnector;
 import RemoteFTP.RemoteFile;
+import Utils.Utils;
 import org.apache.commons.net.ftp.FTPClient;
 
 import java.io.*;
 
 public class RunnableTask implements Runnable {
     private FTPClient ftpClient;
-//    private MongoConnector mongo;
+    private MongoConnector mongo;
     private RemoteFile remoteFile;
     private File destinyDirectory;
 
 
-    public RunnableTask(FTPClient ftpClient, /*MongoConnector mongo,*/ RemoteFile remoteFile, File destinyDirectory) {
+    public RunnableTask(FTPClient ftpClient, MongoConnector mongo, RemoteFile remoteFile, File destinyDirectory) {
         this.ftpClient = ftpClient;
-//        this.mongo = mongo;
+        this.mongo = mongo;
         this.remoteFile = remoteFile;
         this.destinyDirectory = destinyDirectory;
     }
@@ -22,8 +24,7 @@ public class RunnableTask implements Runnable {
     public void run() {
         try {
 //            TODO - NAO ACABADO: protocolo nao permite concorrencia... :(
-
-            File localFile = new File(destinyDirectory.getAbsolutePath() + "\\" + remoteFile.getFileName());
+            File localFile = new File(destinyDirectory.getAbsolutePath() + "/" + remoteFile.getFileName());
             OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(localFile));
             InputStream inputStream = ftpClient.retrieveFileStream(remoteFile.getAbsolutePath() + "/" + remoteFile.getFileName());
             byte[] bytesArray = new byte[4096];
@@ -38,18 +39,13 @@ public class RunnableTask implements Runnable {
             outputStream.close();
             inputStream.close();
 
-
-//            mongo.eraseFailedTask();
+            mongo.removeFromFailedDownloads(remoteFile.getFileName(), remoteFile.getAbsolutePath());
         }
         catch (Exception e) {
-//            mongo.writeFailedTask(filePath, destinyDirectory);
+            mongo.writeFailedDownload(remoteFile.getFileName(), remoteFile.getAbsolutePath(), destinyDirectory.getAbsolutePath() + "/" + remoteFile.getFileName(), Utils.getCurrentDateTime());
         }
 
     }
 
-    private String getFileName (String filePath) {
-        String[] pathAsVector = filePath.split("/");
-        return pathAsVector[pathAsVector.length - 1];
-    }
 }
 

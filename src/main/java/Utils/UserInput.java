@@ -6,23 +6,27 @@ import java.util.Properties;
 
 public class UserInput {
     private String baseDirectory;
-    private String server;
-    private int port;
-    private String user;
-    private String pass;
+    private String ftpServer;
+    private int ftpPort;
+    private String ftpUser;
+    private String ftpPass;
     private String mongoURI;
     private String mongoDatabase;
     private String mongoCollectionDays;
     private String mongoCollectionFailures;
 
-    public UserInput(String path) throws IOException {
+    public UserInput(String path) {
         Properties properties = new Properties();
-        properties.load(new FileInputStream(path));
+        try {
+            properties.load(new FileInputStream(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         baseDirectory = properties.getProperty("BASE_DIRECTORY");
-        server = properties.getProperty("SERVER");
-        port = Integer.parseInt(properties.getProperty("PORT"));
-        user = properties.getProperty("USER");
-        pass = properties.getProperty("PASSWORD");
+        ftpServer = properties.getProperty("SERVER");
+        ftpPort = Integer.parseInt(properties.getProperty("PORT"));
+        ftpUser = properties.getProperty("USER");
+        ftpPass = properties.getProperty("PASSWORD");
         mongoURI = properties.getProperty("MONGO_URI");
         mongoDatabase = properties.getProperty("MONGO_DATABASE");
         mongoCollectionDays = properties.getProperty("MONGO_COLLECTION_DAYS");
@@ -33,20 +37,20 @@ public class UserInput {
         return baseDirectory;
     }
 
-    public String getServer() {
-        return server;
+    public String getFtpServer() {
+        return ftpServer;
     }
 
-    public int getPort() {
-        return port;
+    public int getFtpPort() {
+        return ftpPort;
     }
 
-    public String getUser() {
-        return user;
+    public String getFtpUser() {
+        return ftpUser;
     }
 
-    public String getPass() {
-        return pass;
+    public String getFtpPass() {
+        return ftpPass;
     }
 
     public String getMongoURI() {

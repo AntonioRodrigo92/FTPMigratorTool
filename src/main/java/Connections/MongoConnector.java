@@ -6,10 +6,7 @@ import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.*;
 import org.bson.Document;
-
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.Date;
 
 public class MongoConnector {
@@ -47,55 +44,28 @@ public class MongoConnector {
         finalizedDays.insertOne(doc);
     }
 
-    public synchronized void writeFailedDownload(String filename, String absolute_name, LocalDate consumption_date, Date failed_datetime) {
+    public FindIterable<Document> getFailedTasks() {
+        return failedDownloads.find();
+    }
+
+    public synchronized void writeFailedDownload(String filename, String absolute_path, String destiny_dir, Date failed_datetime) {
         Document doc = new Document();
         doc.put("filename", filename);
-        doc.put("absolute_name", absolute_name);
-        doc.put("consumption_date", consumption_date);
+        doc.put("absolute_path", absolute_path);
+        doc.put("destiny_dir", destiny_dir);
         doc.put("failed_datetime", failed_datetime);
         failedDownloads.insertOne(doc);
     }
 
-    public synchronized void removeFromFailedDownloads(Document doc) {
+    public synchronized void removeFromFailedDownloads(String filename, String absolute_path) {
+        BasicDBObject query = new BasicDBObject();
+        query.append("filename", filename);
+        query.append("absolute_path", absolute_path);
+        failedDownloads.deleteMany(query);
     }
 
     public void closeConnection() {
         mongoClient.close();
-    }
-
-    public static void main(String[] args) {
-        String url = "mongodb+srv://AntonioRodrigo:PalavraPasse1@rinchoa.txroh.mongodb.net/FTPControl?retryWrites=true&w=majority";
-        String database = "FTPControl";
-        String finalizedDays = "finalizedDays";
-        String failedDownloads = "failedDownloads";
-        MongoConnector mongo = new MongoConnector(url, database, finalizedDays, failedDownloads);
-
-        /*
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, 2021);
-        cal.set(Calendar.MONTH, 11);
-        cal.set(Calendar.DAY_OF_MONTH, 10);
-        LocalDate date = Utils.calendarToLocalDate(cal);
-        System.out.println(date);
-
-        SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
-        Date date1 = new Date(System.currentTimeMillis());
-        System.out.println(formatter1.format(date1));
-
-        SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
-        Date date2 = new Date(System.currentTimeMillis());
-        System.out.println(formatter2.format(date2));
-
-        Document doc = new Document();
-        doc.put("consumption_date", date);
-        doc.put("start_datetime", date1);
-        doc.put("end_datetime", date2);
-        doc.put("total_records", 0);
-
-        mongo.writeFinalizedDay(doc);
-         */
-
-        System.out.println(mongo.getLastDay());
     }
 
 }

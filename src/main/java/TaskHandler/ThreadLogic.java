@@ -21,7 +21,6 @@ public class ThreadLogic {
         }
     }
 
-    //    TODO - fazer, lol
     public void waitForAllThreadsToFinish() throws InterruptedException {
         threads.shutdown();
         threads.awaitTermination(6, TimeUnit.HOURS);
