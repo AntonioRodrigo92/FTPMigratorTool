@@ -27,7 +27,7 @@ public class FTPMigratorTool {
         this.tasks = new LinkedList<>();
         this.mongo = new MongoConnector(userInput.getMongoURI(), userInput.getMongoDatabase(), userInput.getMongoCollectionDays(), userInput.getMongoCollectionFailures());
         this.ftpClient = new FTPClientConnector();
-        this.date = mongo.getLastDay();
+        this.date = Utils.sumOneDay(mongo.getLastDay());
     }
 
     private void migrate() {
@@ -37,9 +37,13 @@ public class FTPMigratorTool {
             System.out.println(Utils.yesterday());
 
             while (! date.equals(Utils.yesterday())) {
+
+                System.out.println("INICIO: " + date);
                 Date startTime = Utils.getCurrentDateTime();
-                /*
+
                 ftpClient.connect(userInput.getFtpServer(), userInput.getFtpPort(), userInput.getFtpUser(), userInput.getFtpPass());
+
+
 //                TODO - failedTask
                 for (Document doc : mongo.getFailedTasks()) {
                     RunnableTask task = null;
@@ -54,11 +58,9 @@ public class FTPMigratorTool {
                 ThreadLogic logic = new ThreadLogic(tasks, NUM_WORKERS);
                 logic.executeTasks();
                 logic.waitForAllThreadsToFinish();
-                 */
 
                 Date endTime = Utils.getCurrentDateTime();
-//                mongo.writeFinalizedDay(date, startTime, endTime, taskSize);
-                mongo.writeFinalizedDay(date, startTime, endTime, 0);
+                mongo.writeFinalizedDay(date, startTime, endTime, taskSize);
                 date = Utils.sumOneDay(date);
             }
 
@@ -68,15 +70,15 @@ public class FTPMigratorTool {
         catch (IOException e) {
             e.printStackTrace();
         }
-//        catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 
 
     public static void main(String[] args) {
-        String path = "";
+        String path = "/home/antonio/IdeaProjects/FTPMigratorTool/src/main/resources/input.txt";
         UserInput userInput = new UserInput(path);
         FTPMigratorTool migrator = new FTPMigratorTool(userInput);
         migrator.migrate();
