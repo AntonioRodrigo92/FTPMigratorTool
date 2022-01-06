@@ -1,0 +1,9 @@
+BASE_DIRECTORY=~/migrator/
+SERVER=192.168.1.1
+PORT=21
+USER=sandisk16gb
+PASSWORD=PalavraPasse1
+MONGO_URI=mongodb+srv://AntonioRodrigo:PalavraPasse1@rinchoa.txroh.mongodb.net/FTPControl?retryWrites=true&w=majority
+MONGO_DATABASE=FTPControl
+MONGO_COLLECTION_DAYS=finalizedDays
+MONGO_COLLECTION_FAILURES=failedDownloads
