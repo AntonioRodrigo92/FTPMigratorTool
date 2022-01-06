@@ -21,6 +21,11 @@ public class Utils {
         return outputDir;
     }
 
+    public static File getDirectory(String path) {
+        File outputDir = new java.io.File(path);
+        return outputDir;
+    }
+
     public static LocalDate yesterday() {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, -1);

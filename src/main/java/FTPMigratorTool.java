@@ -78,7 +78,8 @@ public class FTPMigratorTool {
 
 
     public static void main(String[] args) {
-        String path = "/home/antonio/IdeaProjects/FTPMigratorTool/src/main/resources/input.txt";
+//        String path = "/home/antonio/IdeaProjects/FTPMigratorTool/src/main/resources/input.txt";
+        String path = "C:\\Users\\Antonio\\IdeaProjects\\FTPMigratorTool\\src\\main\\resources\\input.txt";
         UserInput userInput = new UserInput(path);
         FTPMigratorTool migrator = new FTPMigratorTool(userInput);
         migrator.migrate();
