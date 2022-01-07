@@ -1,6 +1,7 @@
 import Connections.FTPClientConnector;
 import Connections.MongoConnector;
 import RemoteFTP.RemoteFTPServer;
+import RemoteFTP.RemoteFile;
 import TaskHandler.RunnableTask;
 import TaskHandler.ThreadLogic;
 import Utils.Utils;
@@ -43,10 +44,10 @@ public class FTPMigratorTool {
 
                 ftpClient.connect(userInput.getFtpServer(), userInput.getFtpPort(), userInput.getFtpUser(), userInput.getFtpPass());
 
-
 //                TODO - failedTask
                 for (Document doc : mongo.getFailedTasks()) {
-                    RunnableTask task = null;
+                    RemoteFile file = Utils.docToRemoteFile(doc);
+                    RunnableTask task = Utils.remoteFileToTask(ftpClient.getFtpClient(), mongo, file);
                     tasks.add(task);
                 }
                 File outputDir = Utils.createNewDir(userInput.getBaseDirectory(), date);
@@ -78,8 +79,8 @@ public class FTPMigratorTool {
 
 
     public static void main(String[] args) {
-//        String path = "/home/antonio/IdeaProjects/FTPMigratorTool/src/main/resources/input.txt";
-        String path = "C:\\Users\\Antonio\\IdeaProjects\\FTPMigratorTool\\src\\main\\resources\\input.txt";
+        String path = "/home/antonio/IdeaProjects/FTPMigratorTool/src/main/resources/input.txt";
+//        String path = "C:\\Users\\Antonio\\IdeaProjects\\FTPMigratorTool\\src\\main\\resources\\input.txt";
         UserInput userInput = new UserInput(path);
         FTPMigratorTool migrator = new FTPMigratorTool(userInput);
         migrator.migrate();
