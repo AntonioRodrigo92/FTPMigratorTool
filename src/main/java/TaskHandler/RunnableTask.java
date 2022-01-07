@@ -42,6 +42,7 @@ public class RunnableTask implements Runnable {
             mongo.removeFromFailedDownloads(remoteFile.getFileName(), remoteFile.getAbsolutePath());
         }
         catch (Exception e) {
+            System.err.println("TASK FAILED");
             mongo.writeFailedDownload(remoteFile.getFileName(), remoteFile.getAbsolutePath(), destinyDirectory.getAbsolutePath() + "/" + remoteFile.getFileName(), Utils.getCurrentDateTime());
         }
 
