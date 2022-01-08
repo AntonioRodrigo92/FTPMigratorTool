@@ -20,7 +20,7 @@ import java.util.Date;
 public class Utils {
 
     public static File createNewDir(String baseDir, LocalDate currDay) {
-        File outputDir = new java.io.File(baseDir + "/" + currDay.toString());
+        File outputDir = new java.io.File(baseDir + "\\" + currDay.toString());
         if (! outputDir.exists()) {
             outputDir.mkdirs();
         }
@@ -72,10 +72,10 @@ public class Utils {
     }
 
     private static String getJustDir (String destDirPlusFile) {
-        String[] splits = destDirPlusFile.split("/");
+        String[] splits = destDirPlusFile.split("\\\\");
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < splits.length - 1; i++) {
-            sb.append(splits[i] + "/");
+            sb.append(splits[i] + "\\");
         }
         return sb.toString();
     }

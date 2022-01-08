@@ -1,4 +1,4 @@
-BASE_DIRECTORY=/home/antonio/Desktop
+BASE_DIRECTORY=
 SERVER=192.168.1.1
 PORT=21
 USER=sandisk16gb

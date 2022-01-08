@@ -24,7 +24,7 @@ public class RunnableTask implements Runnable {
     public void run() {
         try {
 //            TODO - NAO ACABADO: protocolo nao permite concorrencia... :(
-            File localFile = new File(destinyDirectory.getAbsolutePath() + "/" + remoteFile.getFileName());
+            File localFile = new File(destinyDirectory.getAbsolutePath() + "\\" + remoteFile.getFileName());
 
             OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(localFile));
             InputStream inputStream = ftpClient.retrieveFileStream(remoteFile.getAbsolutePath() + "/" + remoteFile.getFileName());
