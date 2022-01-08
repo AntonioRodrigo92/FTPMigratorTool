@@ -25,6 +25,7 @@ public class RunnableTask implements Runnable {
         try {
 //            TODO - NAO ACABADO: protocolo nao permite concorrencia... :(
             File localFile = new File(destinyDirectory.getAbsolutePath() + "/" + remoteFile.getFileName());
+
             OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(localFile));
             InputStream inputStream = ftpClient.retrieveFileStream(remoteFile.getAbsolutePath() + "/" + remoteFile.getFileName());
             byte[] bytesArray = new byte[4096];
@@ -40,9 +41,11 @@ public class RunnableTask implements Runnable {
             inputStream.close();
 
             mongo.removeFromFailedDownloads(remoteFile.getFileName(), remoteFile.getAbsolutePath());
+
         }
         catch (Exception e) {
             System.err.println("TASK FAILED");
+            e.printStackTrace();
             mongo.writeFailedDownload(remoteFile.getFileName(), remoteFile.getAbsolutePath(), destinyDirectory.getAbsolutePath() + "/" + remoteFile.getFileName(), Utils.getCurrentDateTime());
         }
 

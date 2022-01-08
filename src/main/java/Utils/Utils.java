@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -57,25 +58,26 @@ public class Utils {
         return new Date(System.currentTimeMillis());
     }
 
-    public static RemoteFile docToRemoteFile (Document doc) {
+    public static RunnableTask docToTunnableTask (FTPClient ftpClient, MongoConnector mongo, Document doc) {
         String filename = (String) doc.get("filename");
         String path = (String) doc.get("absolute_path");
+        String destDir = Utils.getJustDir((String) doc.get("destiny_dir"));
+
         FTPFile file = new FTPFile();
         file.setName(filename);
         RemoteFile remoteFile = new RemoteFile(file, path);
-        return remoteFile;
+        File destinyDir = Utils.getDirectory(destDir);
+        RunnableTask task = new RunnableTask(ftpClient, mongo, remoteFile, destinyDir);
+        return task;
     }
 
-//    public static RunnableTask remoteFileToTask (FTPClient ftpClient, MongoConnector mongo, RemoteFile file, String destinyDirectory) {
-//        File destDir = Utils.getDirectory(destinyDirectory);
-//        RunnableTask task = new RunnableTask(ftpClient, mongo, file, destDir);
-//        return task;
-//    }
-
-    public static RunnableTask remoteFileToTask (FTPClient ftpClient, MongoConnector mongo, RemoteFile file) {
-        File destDir = Utils.getDirectory(file.getAbsolutePath());
-        RunnableTask task = new RunnableTask(ftpClient, mongo, file, destDir);
-        return task;
+    private static String getJustDir (String destDirPlusFile) {
+        String[] splits = destDirPlusFile.split("/");
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < splits.length - 1; i++) {
+            sb.append(splits[i] + "/");
+        }
+        return sb.toString();
     }
 
 }

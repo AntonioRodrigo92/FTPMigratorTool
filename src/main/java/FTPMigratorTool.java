@@ -44,10 +44,8 @@ public class FTPMigratorTool {
 
                 ftpClient.connect(userInput.getFtpServer(), userInput.getFtpPort(), userInput.getFtpUser(), userInput.getFtpPass());
 
-//                TODO - failedTask
                 for (Document doc : mongo.getFailedTasks()) {
-                    RemoteFile file = Utils.docToRemoteFile(doc);
-                    RunnableTask task = Utils.remoteFileToTask(ftpClient.getFtpClient(), mongo, file);
+                    RunnableTask task = Utils.docToTunnableTask(ftpClient.getFtpClient(), mongo, doc);
                     tasks.add(task);
                 }
                 File outputDir = Utils.createNewDir(userInput.getBaseDirectory(), date);
