@@ -33,15 +33,11 @@ public class FTPMigratorTool {
 
     private void migrate() {
         try {
-
-            System.out.println(date);
-            System.out.println(Utils.yesterday());
-
-//            for (Document doc : mongo.getFailedTasks()) {
-//                RunnableTask task = Utils.docToTunnableTask(ftpClient.getFtpClient(), mongo, doc);
-//                tasks.add(task);
-//            }
-
+            System.out.println("Retrieving failed Tasks");
+            for (Document doc : mongo.getFailedTasks()) {
+                RunnableTask task = Utils.docToTunnableTask(ftpClient.getFtpClient(), mongo, doc);
+                tasks.add(task);
+            }
             while (! date.equals(Utils.yesterday())) {
                 System.out.println("INICIO: " + date);
                 Date startTime = Utils.getCurrentDateTime();
@@ -58,10 +54,9 @@ public class FTPMigratorTool {
                 logic.waitForAllThreadsToFinish();
 
                 Date endTime = Utils.getCurrentDateTime();
-//                mongo.writeFinalizedDay(date, startTime, endTime, taskSize);
-//                date = Utils.sumOneDay(date);
+                mongo.writeFinalizedDay(date, startTime, endTime, taskSize);
+                date = Utils.sumOneDay(date);
             }
-
             ftpClient.disconnect();
             mongo.closeConnection();
         }
@@ -71,12 +66,11 @@ public class FTPMigratorTool {
         catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 
 
     public static void main(String[] args) {
-        String path = "/home/antonio/IdeaProjects/FTPMigratorTool/src/main/resources/input.txt";
+        String path = args[0];
         UserInput userInput = new UserInput(path);
         FTPMigratorTool migrator = new FTPMigratorTool(userInput);
         migrator.migrate();
