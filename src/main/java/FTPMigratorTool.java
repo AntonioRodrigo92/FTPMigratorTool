@@ -33,6 +33,7 @@ public class FTPMigratorTool {
 
     private void migrate() {
         try {
+            ftpClient.connect(userInput.getFtpServer(), userInput.getFtpPort(), userInput.getFtpUser(), userInput.getFtpPass());
             System.out.println("Retrieving failed Tasks");
             for (Document doc : mongo.getFailedTasks()) {
                 RunnableTask task = Utils.docToTunnableTask(ftpClient.getFtpClient(), mongo, doc);
@@ -42,7 +43,6 @@ public class FTPMigratorTool {
                 System.out.println("INICIO: " + date);
                 Date startTime = Utils.getCurrentDateTime();
 
-                ftpClient.connect(userInput.getFtpServer(), userInput.getFtpPort(), userInput.getFtpUser(), userInput.getFtpPass());
                 File outputDir = Utils.createNewDir(userInput.getBaseDirectory(), date);
 
                 RemoteFTPServer remoteServer = new RemoteFTPServer(ftpClient.getFtpClient(), mongo, date);
