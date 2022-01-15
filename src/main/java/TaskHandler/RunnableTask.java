@@ -40,7 +40,8 @@ public class RunnableTask implements Runnable {
         ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
         try (FileOutputStream fos = new FileOutputStream(destinyDirectory.getAbsolutePath() + "/" + remoteFile.getFileName())) {
             ftpClient.retrieveFile(remoteFile.getAbsolutePath() + "/" + remoteFile.getFileName(), fos);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }

@@ -58,7 +58,7 @@ public class Utils {
         return new Date(System.currentTimeMillis());
     }
 
-    public static RunnableTask docToTunnableTask (FTPClient ftpClient, MongoConnector mongo, Document doc) {
+    public static RunnableTask docToRunnableTask (FTPClient ftpClient, MongoConnector mongo, Document doc) {
         String filename = (String) doc.get("filename");
         String path = (String) doc.get("absolute_path");
         String destDir = Utils.getJustDir((String) doc.get("destiny_dir"));

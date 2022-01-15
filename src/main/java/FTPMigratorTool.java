@@ -35,7 +35,7 @@ public class FTPMigratorTool {
             ftpClient.connect(userInput.getFtpServer(), userInput.getFtpPort(), userInput.getFtpUser(), userInput.getFtpPass());
             System.out.println("Retrieving failed Tasks");
             for (Document doc : mongo.getFailedTasks()) {
-                RunnableTask task = Utils.docToTunnableTask(ftpClient.getFtpClient(), mongo, doc);
+                RunnableTask task = Utils.docToRunnableTask(ftpClient.getFtpClient(), mongo, doc);
                 tasks.add(task);
             }
             while (! date.equals(Utils.yesterday())) {
