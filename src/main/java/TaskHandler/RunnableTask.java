@@ -36,27 +36,6 @@ public class RunnableTask implements Runnable {
 
     }
 
-    private void teste1() throws IOException {
-        File localFile = new File(destinyDirectory.getAbsolutePath() + "/" + remoteFile.getFileName());
-
-        System.out.println("LOCAL FILE: " + destinyDirectory.getAbsolutePath() + "/" + remoteFile.getFileName());
-        System.out.println("REMOTE FILE: " + remoteFile.getAbsolutePath() + "/" + remoteFile.getFileName());
-
-        OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(localFile));
-        InputStream inputStream = ftpClient.retrieveFileStream(remoteFile.getAbsolutePath() + "/" + remoteFile.getFileName());
-        byte[] bytesArray = new byte[4096];
-        int bytesRead = -1;
-        while ((bytesRead = inputStream.read(bytesArray)) != -1) {
-            outputStream.write(bytesArray, 0, bytesRead);
-        }
-        boolean success = ftpClient.completePendingCommand();
-        if (success) {
-            System.out.println("File has been downloaded successfully.");
-        }
-        outputStream.close();
-        inputStream.close();
-    }
-
     private void downloadFile() throws IOException {
         ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
         try (FileOutputStream fos = new FileOutputStream(destinyDirectory.getAbsolutePath() + "/" + remoteFile.getFileName())) {

@@ -1,7 +1,6 @@
 import Connections.FTPClientConnector;
 import Connections.MongoConnector;
 import RemoteFTP.RemoteFTPServer;
-import RemoteFTP.RemoteFile;
 import TaskHandler.RunnableTask;
 import TaskHandler.ThreadLogic;
 import Utils.Utils;
@@ -55,6 +54,7 @@ public class FTPMigratorTool {
 
                 Date endTime = Utils.getCurrentDateTime();
                 mongo.writeFinalizedDay(date, startTime, endTime, taskSize);
+                System.out.println("FIM: " + date);
                 date = Utils.sumOneDay(date);
             }
             ftpClient.disconnect();
