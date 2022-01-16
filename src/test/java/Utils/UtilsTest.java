@@ -1,32 +1,62 @@
 package Utils;
 
 import TaskHandler.RunnableTask;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.function.BooleanSupplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+//@Disabled("Disabled until ME APETECER, BOY")
 class UtilsTest {
 
     @Test
-    void createNewDir() {
+    void createNewDirSuccess() {
+        String baseDirTest = "C:\\Users\\Antonio\\Desktop\\Freddy Locks\\teste";
+        LocalDate currDayTest = LocalDate.of(2022, 1, 16);
+        File newDirTest = Utils.createNewDir(baseDirTest, currDayTest);
+        Path pathTest = Paths.get(newDirTest.getAbsolutePath());
+        Assertions.assertAll("new directory",
+                () -> assertTrue(Files.exists(pathTest)),
+                () -> assertTrue(newDirTest.isDirectory()),
+                () -> assertFalse(newDirTest.isFile())
+        );
     }
 
     @Test
-    void getDirectory() {
+    void createNewDirFailure() {
+
+    }
+
+    @Test
+    void getDirectorySuccess() {
+        String pathTest = "C:\\Users\\Antonio\\Desktop\\Freddy Locks\\teste";
+        File fileTest = new File(pathTest);
+        Assumptions.assumeTrue(fileTest.exists());
+        File file = Utils.getDirectory(pathTest);
+
+        Assertions.assertNotNull(file);
+        Assertions.assertEquals(file, fileTest);
+    }
+
+    @Test
+    void getDirectoryFailure() {
+        Path pathFileTest = Paths.get("C:\\Users\\Antonio\\Desktop\\Freddy Locks\\testeERRO");
+        Assertions.assertFalse(Files.exists(pathFileTest));
     }
 
     @Test
     void yesterdaySuccess() {
-        LocalDate yesterdayTest = LocalDate.of(2022, 1, 14);
+        LocalDate yesterdayTest = LocalDate.of(2022, 1, 15);
         Assertions.assertEquals(Utils.yesterday(), yesterdayTest);
     }
 
@@ -39,7 +69,7 @@ class UtilsTest {
     @Test
     void calendarToLocalDateSuccess() {
         Calendar cal = Calendar.getInstance();
-        LocalDate todayTest = LocalDate.of(2022, 1, 15);
+        LocalDate todayTest = LocalDate.of(2022, 1, 16);
         LocalDate today = Utils.calendarToLocalDate(cal);
         Assertions.assertEquals(todayTest, today);
     }
@@ -55,7 +85,7 @@ class UtilsTest {
     @Test
     void dateToLocalDateSuccess() {
         Date date = new Date();
-        LocalDate localDateTest = LocalDate.of(2022, 1, 15);
+        LocalDate localDateTest = LocalDate.of(2022, 1, 16);
         LocalDate localDate = Utils.dateToLocalDate(date);
         Assertions.assertEquals(localDate, localDateTest);
     }
@@ -70,15 +100,15 @@ class UtilsTest {
 
     @Test
     void sumOneDaySuccess() {
-        LocalDate dayTest = LocalDate.of(2022, 1, 15);
-        LocalDate dayAfterTest = LocalDate.of(2022, 1, 16);
+        LocalDate dayTest = LocalDate.of(2022, 1, 16);
+        LocalDate dayAfterTest = LocalDate.of(2022, 1, 17);
         LocalDate dayAfter = Utils.sumOneDay(dayTest);
         Assertions.assertEquals(dayAfter, dayAfterTest);
     }
 
     @Test
     void sumOneDayFailure() {
-        LocalDate dayTest = LocalDate.of(2022, 1, 15);
+        LocalDate dayTest = LocalDate.of(2022, 1, 16);
         LocalDate dayAfter = Utils.sumOneDay(dayTest);
         Assertions.assertNotEquals(dayAfter, dayTest);
     }
@@ -101,12 +131,14 @@ class UtilsTest {
         int secondsTest = currentTest.getSeconds();
         int seconds = current.getSeconds();
 
-        Assertions.assertEquals(day, dayTest);
-        Assertions.assertEquals(month, monthTest);
-        Assertions.assertEquals(year, yearTest);
-        Assertions.assertEquals(hour, hourTest);
-        Assertions.assertEquals(minutes, minutesTest);
-        Assertions.assertEquals(seconds, secondsTest);
+        Assertions.assertAll("",
+                () -> assertEquals(day, dayTest),
+                () -> assertEquals(month, monthTest),
+                () -> assertEquals(year, yearTest),
+                () -> assertEquals(hour, hourTest),
+                () -> assertEquals(minutes, minutesTest),
+                () -> assertEquals(seconds, secondsTest)
+        );
     }
 
     @Test
