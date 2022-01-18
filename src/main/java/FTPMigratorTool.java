@@ -5,6 +5,8 @@ import TaskHandler.RunnableTask;
 import TaskHandler.ThreadLogic;
 import Utils.Utils;
 import Utils.UserInput;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bson.Document;
 
 import java.io.File;
@@ -21,6 +23,8 @@ public class FTPMigratorTool {
     private MongoConnector mongo;
     private FTPClientConnector ftpClient;
     private LocalDate date;
+    private static final Logger LOG = LogManager.getLogger();
+
 
     public FTPMigratorTool(UserInput userInput) {
         this.userInput = userInput;
@@ -33,18 +37,19 @@ public class FTPMigratorTool {
     private void migrate() {
         try {
             ftpClient.connect(userInput.getFtpServer(), userInput.getFtpPort(), userInput.getFtpUser(), userInput.getFtpPass());
-            System.out.println("Retrieving failed Tasks");
+            LOG.info("Retrieving failed Tasks");
             for (Document doc : mongo.getFailedTasks()) {
                 RunnableTask task = Utils.docToRunnableTask(ftpClient.getFtpClient(), mongo, doc);
                 tasks.add(task);
             }
             while (! date.equals(Utils.yesterday())) {
-                System.out.println("INICIO: " + date);
+                LOG.info("BEGINNING: " + date);
                 Date startTime = Utils.getCurrentDateTime();
 
                 File outputDir = Utils.createNewDir(userInput.getBaseDirectory(), date);
 
                 RemoteFTPServer remoteServer = new RemoteFTPServer(ftpClient.getFtpClient(), mongo, date);
+                LOG.info("GETTING FILES AS TASKS");
                 tasks.addAll(remoteServer.getFilesAsTasks(outputDir));
                 int taskSize = tasks.size();
 
@@ -54,17 +59,17 @@ public class FTPMigratorTool {
 
                 Date endTime = Utils.getCurrentDateTime();
                 mongo.writeFinalizedDay(date, startTime, endTime, taskSize);
-                System.out.println("FIM: " + date);
+                LOG.info("END: " + date);
                 date = Utils.sumOneDay(date);
             }
             ftpClient.disconnect();
             mongo.closeConnection();
         }
         catch (IOException e) {
-            e.printStackTrace();
+            LOG.error(e);
         }
         catch (InterruptedException e) {
-            e.printStackTrace();
+            LOG.error(e);
         }
     }
 

@@ -4,6 +4,8 @@ import RemoteFTP.RemoteFile;
 import Utils.Utils;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 
@@ -12,6 +14,7 @@ public class RunnableTask implements Runnable {
     private MongoConnector mongo;
     private RemoteFile remoteFile;
     private File destinyDirectory;
+    private static final Logger LOG = LogManager.getLogger();
 
 
     public RunnableTask(FTPClient ftpClient, MongoConnector mongo, RemoteFile remoteFile, File destinyDirectory) {
@@ -29,8 +32,7 @@ public class RunnableTask implements Runnable {
             mongo.removeFromFailedDownloads(remoteFile.getFileName(), remoteFile.getAbsolutePath());
         }
         catch (Exception e) {
-            System.err.println("TASK FAILED");
-            e.printStackTrace();
+            LOG.error(e);
             mongo.writeFailedDownload(remoteFile.getFileName(), remoteFile.getAbsolutePath(), destinyDirectory.getAbsolutePath() + "/" + remoteFile.getFileName(), Utils.getCurrentDateTime());
         }
 
@@ -42,7 +44,7 @@ public class RunnableTask implements Runnable {
             ftpClient.retrieveFile(remoteFile.getAbsolutePath() + "/" + remoteFile.getFileName(), fos);
         }
         catch (IOException e) {
-            e.printStackTrace();
+            LOG.error(e);
         }
     }
 
