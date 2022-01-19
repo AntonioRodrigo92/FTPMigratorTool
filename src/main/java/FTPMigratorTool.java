@@ -59,7 +59,7 @@ public class FTPMigratorTool {
 
                 Date endTime = Utils.getCurrentDateTime();
                 mongo.writeFinalizedDay(date, startTime, endTime, taskSize);
-                LOG.info("END: " + date);
+                LOG.info("END: " + date + " - " + taskSize + " documents!");
                 date = Utils.sumOneDay(date);
             }
             ftpClient.disconnect();
