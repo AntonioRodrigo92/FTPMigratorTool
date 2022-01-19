@@ -16,7 +16,7 @@ import java.util.function.BooleanSupplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//@Disabled("Disabled until ME APETECER, BOY")
+@Disabled("Disabled until ME APETECER, BOY")
 class UtilsTest {
 
     @Test
