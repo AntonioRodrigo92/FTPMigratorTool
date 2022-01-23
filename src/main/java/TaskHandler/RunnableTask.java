@@ -14,7 +14,7 @@ public class RunnableTask implements Runnable {
     private MongoConnector mongo;
     private RemoteFile remoteFile;
     private File destinyDirectory;
-    private static final Logger LOG = LogManager.getLogger();
+    private final Logger LOG = LogManager.getLogger();
 
 
     public RunnableTask(FTPClient ftpClient, MongoConnector mongo, RemoteFile remoteFile, File destinyDirectory) {

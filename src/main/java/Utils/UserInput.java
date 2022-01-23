@@ -17,7 +17,7 @@ public class UserInput {
     private String mongoDatabase;
     private String mongoCollectionDays;
     private String mongoCollectionFailures;
-    private static final Logger LOG = LogManager.getLogger();
+    private final Logger LOG = LogManager.getLogger();
 
     public UserInput(String path) {
         Properties properties = new Properties();
