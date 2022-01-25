@@ -52,6 +52,7 @@ public class FTPMigratorTool {
                 LOG.info("GETTING FILES AS TASKS");
                 tasks.addAll(remoteServer.getFilesAsTasks(outputDir));
                 int taskSize = tasks.size();
+                LOG.info("Processing " + taskSize + " files!");
 
                 ThreadLogic logic = new ThreadLogic(tasks, NUM_WORKERS);
                 logic.executeTasks();
@@ -59,11 +60,12 @@ public class FTPMigratorTool {
 
                 Date endTime = Utils.getCurrentDateTime();
                 mongo.writeFinalizedDay(date, startTime, endTime, taskSize);
-                LOG.info("END: " + date + " - " + taskSize + " files!");
+                LOG.info("END: " + date);
                 date = Utils.sumOneDay(date);
             }
             ftpClient.disconnect();
             mongo.closeConnection();
+            LOG.info("Migrations are up-to-date!");
         }
         catch (IOException e) {
             LOG.error(e);
