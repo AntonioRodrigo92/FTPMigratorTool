@@ -37,10 +37,14 @@ public class FTPMigratorTool {
     private void migrate() {
         try {
             ftpClient.connect(userInput.getFtpServer(), userInput.getFtpPort(), userInput.getFtpUser(), userInput.getFtpPass());
-            LOG.info("Retrieving failed Tasks");
+            LOG.info("RETRIEVING FAILED TASKS");
             for (Document doc : mongo.getFailedTasks()) {
                 RunnableTask task = Utils.docToRunnableTask(ftpClient.getFtpClient(), mongo, doc);
                 tasks.add(task);
+            }
+            int taskSize = tasks.size();
+            if (taskSize > 0) {
+                LOG.warn("RETRIEVED " + taskSize + " FAILED DOCUMENTS");
             }
             while (! date.equals(Utils.yesterday())) {
                 LOG.info("BEGINNING: " + date);
@@ -51,8 +55,8 @@ public class FTPMigratorTool {
                 RemoteFTPServer remoteServer = new RemoteFTPServer(ftpClient.getFtpClient(), mongo, date);
                 LOG.info("GETTING FILES AS TASKS");
                 tasks.addAll(remoteServer.getFilesAsTasks(outputDir));
-                int taskSize = tasks.size();
-                LOG.info("Processing " + taskSize + " files!");
+                taskSize = tasks.size();
+                LOG.info("PROCESSING " + taskSize + " FILES");
 
                 ThreadLogic logic = new ThreadLogic(tasks, NUM_WORKERS);
                 logic.executeTasks();
@@ -65,7 +69,7 @@ public class FTPMigratorTool {
             }
             ftpClient.disconnect();
             mongo.closeConnection();
-            LOG.info("Migrations are up-to-date!");
+            LOG.info("MIGRATIONS ARE UP-TO-DATE");
         }
         catch (IOException e) {
             LOG.error(e);
