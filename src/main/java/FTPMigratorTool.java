@@ -72,9 +72,15 @@ public class FTPMigratorTool {
             LOG.info("MIGRATIONS ARE UP-TO-DATE");
         }
         catch (IOException e) {
+            LOG.error("FTPMigrator: IOException");
             LOG.error(e);
         }
         catch (InterruptedException e) {
+            LOG.error("FTPMigrator: InterruptedException");
+            LOG.error(e);
+        }
+        catch (Exception e) {
+            LOG.error("FTPMigrator: GeneralException");
             LOG.error(e);
         }
     }

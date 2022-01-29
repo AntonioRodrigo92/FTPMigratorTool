@@ -32,6 +32,7 @@ public class RunnableTask implements Runnable {
             mongo.removeFromFailedDownloads(remoteFile.getFileName(), remoteFile.getAbsolutePath());
         }
         catch (Exception e) {
+            LOG.error("RunnableTask - run(): GeneralException");
             LOG.error(e);
             mongo.writeFailedDownload(remoteFile.getFileName(), remoteFile.getAbsolutePath(), destinyDirectory.getAbsolutePath() + "/" + remoteFile.getFileName(), Utils.getCurrentDateTime());
         }
@@ -44,6 +45,7 @@ public class RunnableTask implements Runnable {
             ftpClient.retrieveFile(remoteFile.getAbsolutePath() + "/" + remoteFile.getFileName(), fos);
         }
         catch (IOException e) {
+            LOG.error("RunnableTask - downloadFile(): IOException");
             LOG.error(e);
         }
     }

@@ -24,6 +24,7 @@ public class UserInput {
         try {
             properties.load(new FileInputStream(path));
         } catch (IOException e) {
+            LOG.error("UserInput: IOException");
             LOG.error(e);
         }
         baseDirectory = properties.getProperty("BASE_DIRECTORY");
