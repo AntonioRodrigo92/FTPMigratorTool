@@ -69,7 +69,7 @@ public class FTPMigratorTool {
             }
             ftpClient.disconnect();
             mongo.closeConnection();
-            LOG.info("MIGRATIONS ARE UP-TO-DATE");
+            LOG.info("MIGRATIONS ARE UP-TO-DATE \n");
         }
         catch (IOException e) {
             LOG.error("FTPMigrator: IOException");
