@@ -46,7 +46,7 @@ public class FTPMigratorTool {
             if (taskSize > 0) {
                 LOG.warn("RETRIEVED " + taskSize + " FAILED DOCUMENTS");
             }
-            while (! date.equals(Utils.yesterday())) {
+            while (! date.equals(Utils.today())) {
                 LOG.info("BEGINNING: " + date);
                 Date startTime = Utils.getCurrentDateTime();
 

@@ -38,6 +38,10 @@ public class Utils {
         return calendarToLocalDate(cal);
     }
 
+    public static LocalDate today() {
+        return LocalDate.now();
+    }
+
 
     public static LocalDate calendarToLocalDate(Calendar cal) {
         return LocalDateTime.ofInstant(cal.toInstant(), cal.getTimeZone().toZoneId()).toLocalDate();
