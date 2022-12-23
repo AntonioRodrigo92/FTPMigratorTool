@@ -5,6 +5,8 @@ import TaskHandler.RunnableTask;
 import Utils.Utils;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +20,7 @@ public class RemoteFTPServer {
     private List<RemoteFile> files;
     private LocalDate selectedDate;
 
+
     public RemoteFTPServer(FTPClient ftpClient, MongoConnector mongo, LocalDate selectedDate) {
         this.ftpClient = ftpClient;
         this.mongo = mongo;
@@ -27,7 +30,6 @@ public class RemoteFTPServer {
     }
 
     public List<RunnableTask> getFilesAsTasks(File destinyDirectory) throws IOException {
-        System.out.println("GET FILES AS TASKS");
         scanFiles();
         List<RunnableTask> tasks = new ArrayList<>();
         for (RemoteFile file : files) {

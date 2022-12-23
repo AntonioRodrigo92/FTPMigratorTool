@@ -1,5 +1,8 @@
 package Utils;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -14,13 +17,15 @@ public class UserInput {
     private String mongoDatabase;
     private String mongoCollectionDays;
     private String mongoCollectionFailures;
+    private final Logger LOG = LogManager.getLogger();
 
     public UserInput(String path) {
         Properties properties = new Properties();
         try {
             properties.load(new FileInputStream(path));
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("UserInput: IOException");
+            LOG.error(e);
         }
         baseDirectory = properties.getProperty("BASE_DIRECTORY");
         ftpServer = properties.getProperty("SERVER");

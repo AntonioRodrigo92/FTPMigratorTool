@@ -1,11 +1,12 @@
 import Connections.FTPClientConnector;
 import Connections.MongoConnector;
 import RemoteFTP.RemoteFTPServer;
-import RemoteFTP.RemoteFile;
 import TaskHandler.RunnableTask;
 import TaskHandler.ThreadLogic;
 import Utils.Utils;
 import Utils.UserInput;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bson.Document;
 
 import java.io.File;
@@ -22,6 +23,8 @@ public class FTPMigratorTool {
     private MongoConnector mongo;
     private FTPClientConnector ftpClient;
     private LocalDate date;
+    private static final Logger LOG = LogManager.getLogger();
+
 
     public FTPMigratorTool(UserInput userInput) {
         this.userInput = userInput;
@@ -33,25 +36,27 @@ public class FTPMigratorTool {
 
     private void migrate() {
         try {
-
-            System.out.println(date);
-            System.out.println(Utils.yesterday());
-
+            ftpClient.connect(userInput.getFtpServer(), userInput.getFtpPort(), userInput.getFtpUser(), userInput.getFtpPass());
+            LOG.info("RETRIEVING FAILED TASKS");
             for (Document doc : mongo.getFailedTasks()) {
-                RunnableTask task = Utils.docToTunnableTask(ftpClient.getFtpClient(), mongo, doc);
+                RunnableTask task = Utils.docToRunnableTask(ftpClient.getFtpClient(), mongo, doc);
                 tasks.add(task);
             }
-
-            while (! date.equals(Utils.yesterday())) {
-                System.out.println("INICIO: " + date);
+            int taskSize = tasks.size();
+            if (taskSize > 0) {
+                LOG.warn("RETRIEVED " + taskSize + " FAILED DOCUMENTS");
+            }
+            while (! date.equals(Utils.today())) {
+                LOG.info("BEGINNING: " + date);
                 Date startTime = Utils.getCurrentDateTime();
 
-                ftpClient.connect(userInput.getFtpServer(), userInput.getFtpPort(), userInput.getFtpUser(), userInput.getFtpPass());
                 File outputDir = Utils.createNewDir(userInput.getBaseDirectory(), date);
 
                 RemoteFTPServer remoteServer = new RemoteFTPServer(ftpClient.getFtpClient(), mongo, date);
+                LOG.info("GETTING FILES AS TASKS");
                 tasks.addAll(remoteServer.getFilesAsTasks(outputDir));
-                int taskSize = tasks.size();
+                taskSize = tasks.size();
+                LOG.info("PROCESSING " + taskSize + " FILES");
 
                 ThreadLogic logic = new ThreadLogic(tasks, NUM_WORKERS);
                 logic.executeTasks();
@@ -59,25 +64,30 @@ public class FTPMigratorTool {
 
                 Date endTime = Utils.getCurrentDateTime();
                 mongo.writeFinalizedDay(date, startTime, endTime, taskSize);
+                LOG.info("END: " + date);
                 date = Utils.sumOneDay(date);
             }
-
             ftpClient.disconnect();
             mongo.closeConnection();
+            LOG.info("MIGRATIONS ARE UP-TO-DATE \n");
         }
         catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("FTPMigrator: IOException");
+            LOG.error(e);
         }
         catch (InterruptedException e) {
-            e.printStackTrace();
+            LOG.error("FTPMigrator: InterruptedException");
+            LOG.error(e);
         }
-
+        catch (Exception e) {
+            LOG.error("FTPMigrator: GeneralException");
+            LOG.error(e);
+        }
     }
 
 
     public static void main(String[] args) {
-        String path = "/home/antonio/IdeaProjects/FTPMigratorTool/src/main/resources/input.txt";
-//        String path = "C:\\Users\\Antonio\\IdeaProjects\\FTPMigratorTool\\src\\main\\resources\\input.txt";
+        String path = args[0];
         UserInput userInput = new UserInput(path);
         FTPMigratorTool migrator = new FTPMigratorTool(userInput);
         migrator.migrate();

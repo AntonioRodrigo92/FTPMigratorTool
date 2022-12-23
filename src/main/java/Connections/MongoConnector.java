@@ -5,6 +5,8 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bson.Document;
 import java.time.LocalDate;
 import java.util.Date;
@@ -14,6 +16,7 @@ public class MongoConnector {
     private MongoDatabase database;
     private MongoCollection<Document> finalizedDays;
     private MongoCollection<Document> failedDownloads;
+    private final Logger LOG = LogManager.getLogger();
 
     public MongoConnector(String uri, String databaseName, String finalizedDays, String failedDownloads) {
         ConnectionString connectionString = new ConnectionString(uri);
@@ -24,6 +27,8 @@ public class MongoConnector {
         this.database = mongoClient.getDatabase(databaseName);
         this.finalizedDays = database.getCollection(finalizedDays);
         this.failedDownloads = database.getCollection(failedDownloads);
+
+        LOG.info("Connected do Mongo Database successfully!");
     }
 
     public LocalDate getLastDay() {
@@ -66,6 +71,7 @@ public class MongoConnector {
 
     public void closeConnection() {
         mongoClient.close();
+        LOG.info("Mongo connection closed!");
     }
 
 }

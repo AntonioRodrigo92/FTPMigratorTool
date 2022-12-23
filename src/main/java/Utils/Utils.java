@@ -38,6 +38,10 @@ public class Utils {
         return calendarToLocalDate(cal);
     }
 
+    public static LocalDate today() {
+        return LocalDate.now();
+    }
+
 
     public static LocalDate calendarToLocalDate(Calendar cal) {
         return LocalDateTime.ofInstant(cal.toInstant(), cal.getTimeZone().toZoneId()).toLocalDate();
@@ -58,7 +62,7 @@ public class Utils {
         return new Date(System.currentTimeMillis());
     }
 
-    public static RunnableTask docToTunnableTask (FTPClient ftpClient, MongoConnector mongo, Document doc) {
+    public static RunnableTask docToRunnableTask (FTPClient ftpClient, MongoConnector mongo, Document doc) {
         String filename = (String) doc.get("filename");
         String path = (String) doc.get("absolute_path");
         String destDir = Utils.getJustDir((String) doc.get("destiny_dir"));
