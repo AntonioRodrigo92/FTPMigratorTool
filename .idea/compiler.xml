@@ -7,8 +7,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="FTPMigratorTool" />
-        <module name="FTPMigratorTool(antigo)" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="FTPMigratorTool(antigo)" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
